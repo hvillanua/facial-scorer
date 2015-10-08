@@ -36,7 +36,7 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
     if not os.path.exists(model_path):
         os.makedirs(model_path)
     # if the pca or the model file don't exist, train a new pca and model and save it
-    model_path = os.path.join(model_path, 'model.pkl')
+    regression_path = os.path.join(model_path, 'regression.pkl')
     pca_path = os.path.join(model_path, 'pca.pkl')
     """
         Set n_components to a high value (i.e.: 200) and use
@@ -45,7 +45,7 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
         Can apply Kaiser or Scree plot criterions to approximately
         determine a good value.
     """
-    if (not os.path.exists(pca_path)) or (not os.path.exists(model_path)):
+    if (not os.path.exists(pca_path)) or (not os.path.exists(regression_path)):
         faces_filename = os.path.join(faces_folder, '*.jpg')
         images = glob.glob(faces_filename)
         images = map(lambda x: x[x.rfind("\\")+1:], images)
@@ -95,7 +95,7 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
         # fit the regression and save it
         reg = linear_model.LinearRegression()
         reg.fit(X_train_pca,Y_train)
-        joblib.dump(reg, model_path)
+        joblib.dump(reg, regression_path)
         print "Printing model precision:"
         #print "Slope:", reg.coef_
         print "Intercept:", reg.intercept_
@@ -104,7 +104,7 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
     else:
         #load the pca and the model
         pca = joblib.load(pca_path)
-        reg = joblib.load(model_path)
+        reg = joblib.load(regression_path)
 
     if not os.path.exists(pred_img_path):
         print "The given path does not exist."
