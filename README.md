@@ -33,5 +33,3 @@ To generate a new model based on your own image database:
     you will see the name is "originalName_X" where X is the detected face.
   - Call the unifyFaceFilenames function found in preprocess_images.py.
   - Call the predict function found in predict_score.py.
-You can tune the parameters of the cascade.detectMultiScale() funtion inside the preprocess function as well as 
-the "n_components" variable inside the predict function manually on the code.
