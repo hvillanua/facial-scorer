@@ -8,7 +8,7 @@ import sys, os, glob, re
 import cv2, PIL
 from PIL import Image
 
-def preprocess(haarcascades_dir, images_folder=u'images', faces_folder=u'faces'):
+def preprocess(haarcascades_dir, images_folder=u'images', faces_folder=u'faces', scaleFactor_=1.05, minNeighbors_=4, minSize_=(30,30)):
     """ preprocess all the images present in the "images" folder
 
     Parameters
@@ -19,6 +19,12 @@ def preprocess(haarcascades_dir, images_folder=u'images', faces_folder=u'faces')
         path to the folder containing the downloaded images
     faces_folder : string, optional, default u'faces'
         path to the folder containing the faces cropped from the original images
+    scaleFactor_ : float, optional, default 1.05
+        parameter specifying how much the image size is reduced at each image scale.
+    minNeighbors_ : int, optional, default 4
+        parameter specifying how many neighbors each candidate rectangle should have to retain it
+    minSize_ : tuple, optional, default (30,30)
+        minimum possible object size. Objects smaller than that are ignored.
     """
 
     if not os.path.exists(faces_folder):
@@ -40,7 +46,7 @@ def preprocess(haarcascades_dir, images_folder=u'images', faces_folder=u'faces')
         # another option is to be less strict by decreasing minNeighbors to 2 and manually
         # deleting the face images generated, so that each original image only has one preprocess face image
         # i.e.: images that don't contain a face, contain multiple faces, etc...
-        rects = cascade.detectMultiScale(img, scaleFactor=1.05, minNeighbors=4, flags=cv2.CASCADE_SCALE_IMAGE, minSize=(30,30))
+        rects = cascade.detectMultiScale(img, scaleFactor=scaleFactor_, minNeighbors=minNeighbors_, flags=cv2.CASCADE_SCALE_IMAGE, minSize=minSize_)
         if len(rects) == 0:
             print "No face detected!"
             continue

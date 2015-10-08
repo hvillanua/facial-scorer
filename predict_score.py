@@ -10,14 +10,7 @@ from sklearn.externals import joblib
 from sklearn.decomposition import RandomizedPCA
 from sklearn import linear_model
 
-# function to predict and train a regression model and save it for future use
-# @scores_folder path to the folder containing the pickle file with the scores
-# @faces_folder path to the folder containing the faces cropped from the original images
-# @model_dir path to save the regression model
-# @color whether to use images with color or use a gray level representation, applies to training as well as predicting
-# @pred_img_path the path to the image to predict
-# @base_width base width of the faces
-def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model_path=u'model', color=False, base_width=62):
+def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model_path=u'model', color=False, base_width=62, n_components=20):
     """ function to predict the score of a face
         if the prediction model model doesn't exist in the
         model_path, it will create a new one and save it for future use
@@ -36,6 +29,8 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
         whether to use images with color or use a gray level representation
     base_width : int, optional, default 62
         target width for the resized square shaped of the input image
+    n_components: int, optional, default 20
+        maximum number of components to keep. When not given or None, this is set to n_features (the second dimension of the training data).
     """
 
     if not os.path.exists(model_path):
@@ -50,7 +45,6 @@ def predict(pred_img_path, scores_folder=u'scores', faces_folder=u'faces', model
         Can apply Kaiser or Scree plot criterions to approximately
         determine a good value.
     """
-    n_components = 20
     if (not os.path.exists(pca_path)) or (not os.path.exists(model_path)):
         faces_filename = os.path.join(faces_folder, '*.jpg')
         images = glob.glob(faces_filename)
