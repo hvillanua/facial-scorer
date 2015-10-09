@@ -1,6 +1,6 @@
 # facial-scorer
-
 Facial scorer applying eigenfaces and linear regression.
+
 The images and the faces folders contain the compressed images, so you don't need to run the fetch_data_facial_scorer.py script.
 
 The given image dataset is incomplete, as the scores only range from 7.8 to 8.3. This will yield unfair results
